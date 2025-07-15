@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-function App() {
+import NotFoundPage from "./pages/NotFoundPage";
+
+import "./App.css";
+import MainLayout from "./components/layout/MainLayout";
+import HelpDeskPage from "./pages/HelpDeskPage";
+import AdminPage from "./pages/AdminPage";
+import KnowlegeBasePage from "./pages/KnowlegeBasePage";
+import ItAsseetsPage from "./pages/ItAsseetsPage";
+import ProfilePage from "./pages/ProfilePage";
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<HelpDeskPage />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/knowledge-base" element={<KnowlegeBasePage/>} />
+          <Route path="/it-assets" element={<ItAsseetsPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+        </Route>
+
+        {/** Страница 404 */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
