@@ -948,6 +948,44 @@
 
 .toggle-button.expanded svg {
   transform: rotate(90deg);
+}/* Анимация для подтем */
+.tree-child-container {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out;
+  margin-left: 15px;
+}
+
+.tree-child-container.expanded {
+  max-height: 200px; /* Достаточно большое значение для плавного раскрытия */
+  transition: max-height 0.5s ease-in;
+}
+
+.tree-parent-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.toggle-button {
+  width: 24px;
+  height: 24px;
+  margin-right: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: transform 0.2s ease;
+}
+
+.toggle-button svg {
+  transition: transform 0.2s ease;
+}
+
+.toggle-button.expanded svg {
+  transform: rotate(90deg);
 }
 
 .tree-container li {
