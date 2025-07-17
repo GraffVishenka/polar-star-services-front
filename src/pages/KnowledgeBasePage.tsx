@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { TextStyle } from '@tiptap/extension-text-style';
@@ -45,38 +45,58 @@ const ContentEditor = ({ content, onUpdate }: { content: string; onUpdate: (cont
         types: ['heading', 'paragraph'],
       }),
     ],
-    content: content,
-    onUpdate: ({ editor }) => {
-      onUpdate(editor.getHTML());
+    content,
+    onUpdate: ({ editor: editorInstance }) => {
+      onUpdate(editorInstance.getHTML());
     },
   });
 
-  const addImage = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = async () => {
-      if (input.files?.length) {
-        const file = input.files[0];
-        const reader = new FileReader();
-        reader.onload = () => {
-          editor?.chain().focus().setImage({ src: reader.result as string }).run();
-        };
-        reader.readAsDataURL(file);
-      }
-    };
-    input.click();
+  const handleButtonClick = (e: React.MouseEvent, command: () => void) => {
+    e.preventDefault();
+    e.stopPropagation();
+    command();
   };
 
-  const addYoutubeVideo = () => {
-    const url = prompt('Enter YouTube URL');
-    if (url) {
-      editor?.commands.setYoutubeVideo({
-        src: url,
-        width: 640,
-        height: 480,
-      });
-    }
+  const addImage = (e: React.MouseEvent) => {
+    handleButtonClick(e, () => {
+      if (!editor || editor.isDestroyed) return;
+
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.onchange = async () => {
+        if (input.files?.length) {
+          const file = input.files[0];
+          const reader = new FileReader();
+          reader.onload = () => {
+            if (editor && !editor.isDestroyed) {
+              editor.chain().focus().setImage({ src: reader.result as string }).run();
+            }
+          };
+          reader.readAsDataURL(file);
+        }
+      };
+      input.click();
+    });
+  };
+
+  const addYoutubeVideo = (e: React.MouseEvent) => {
+    handleButtonClick(e, () => {
+      if (!editor || editor.isDestroyed) return;
+
+      const url = prompt('Enter YouTube URL');
+      if (url) {
+        editor.commands.setYoutubeVideo({
+          src: url,
+          width: 640,
+          height: 480,
+        });
+      }
+    });
+  };
+
+  const createCommandHandler = (command: () => void) => {
+    return (e: React.MouseEvent) => handleButtonClick(e, command);
   };
 
   if (!editor) {
@@ -84,10 +104,14 @@ const ContentEditor = ({ content, onUpdate }: { content: string; onUpdate: (cont
   }
 
   return (
-    <div className="editor-container">
-      <div className="editor-toolbar">
+    <div className="editor-container" onClick={(e) => e.stopPropagation()}>
+      <div className="editor-toolbar" onClick={(e) => e.stopPropagation()}>
         <select
-          onChange={(e) => editor.chain().focus().setFontFamily(e.target.value).run()}
+          onChange={(e) => {
+            e.stopPropagation();
+            editor.chain().focus().setFontFamily(e.target.value).run();
+          }}
+          onClick={(e) => e.stopPropagation()}
           value={editor.getAttributes('textStyle').fontFamily || ''}
         >
           <option value="">Font</option>
@@ -98,7 +122,11 @@ const ContentEditor = ({ content, onUpdate }: { content: string; onUpdate: (cont
         </select>
 
         <select
-          onChange={(e) => editor.chain().focus().setFontSize(e.target.value).run()}
+          onChange={(e) => {
+            e.stopPropagation();
+            editor.chain().focus().setFontSize(e.target.value).run();
+          }}
+          onClick={(e) => e.stopPropagation()}
           value={editor.getAttributes('textStyle').fontSize || ''}
         >
           <option value="">Size</option>
@@ -109,19 +137,19 @@ const ContentEditor = ({ content, onUpdate }: { content: string; onUpdate: (cont
         </select>
 
         <button
-          onClick={() => editor.chain().focus().toggleBold().run()}
+          onClick={createCommandHandler(() => editor.chain().focus().toggleBold().run())}
           className={editor.isActive('bold') ? 'is-active' : ''}
         >
           Bold
         </button>
         <button
-          onClick={() => editor.chain().focus().toggleItalic().run()}
+          onClick={createCommandHandler(() => editor.chain().focus().toggleItalic().run())}
           className={editor.isActive('italic') ? 'is-active' : ''}
         >
           Italic
         </button>
         <button
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          onClick={createCommandHandler(() => editor.chain().focus().toggleUnderline().run())}
           className={editor.isActive('underline') ? 'is-active' : ''}
         >
           Underline
@@ -129,45 +157,49 @@ const ContentEditor = ({ content, onUpdate }: { content: string; onUpdate: (cont
 
         <input
           type="color"
-          onInput={(e) => editor.chain().focus().setColor(e.currentTarget.value).run()}
+          onInput={(e) => {
+            e.stopPropagation();
+            editor.chain().focus().setColor(e.currentTarget.value).run();
+          }}
+          onClick={(e) => e.stopPropagation()}
           value={editor.getAttributes('textStyle').color || '#000000'}
         />
 
         <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+          onClick={createCommandHandler(() => editor.chain().focus().toggleHeading({ level: 1 }).run())}
           className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
         >
           H1
         </button>
         <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+          onClick={createCommandHandler(() => editor.chain().focus().toggleHeading({ level: 2 }).run())}
           className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
         >
           H2
         </button>
 
         <button
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          onClick={createCommandHandler(() => editor.chain().focus().toggleBulletList().run())}
           className={editor.isActive('bulletList') ? 'is-active' : ''}
         >
           List
         </button>
 
         <button
-          onClick={() => editor.chain().focus().setTextAlign('left').run()}
+          onClick={createCommandHandler(() => editor.chain().focus().setTextAlign('left').run())}
           className={editor.isActive({ textAlign: 'left' }) ? 'is-active' : ''}
         >
           Left
         </button>
         <button
-          onClick={() => editor.chain().focus().setTextAlign('center').run()}
+          onClick={createCommandHandler(() => editor.chain().focus().setTextAlign('center').run())}
           className={editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''}
         >
           Center
         </button>
 
         <button
-          onClick={() => {
+          onClick={createCommandHandler(() => {
             const previousUrl = editor.getAttributes('link').href;
             const url = window.prompt('URL', previousUrl);
 
@@ -178,17 +210,21 @@ const ContentEditor = ({ content, onUpdate }: { content: string; onUpdate: (cont
             }
 
             editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
-          }}
+          })}
           className={editor.isActive('link') ? 'is-active' : ''}
         >
           Link
         </button>
 
-        <button onClick={addImage}>Image</button>
-        <button onClick={addYoutubeVideo}>YouTube</button>
+        <button onClick={(e) => addImage(e)}>Image</button>
+        <button onClick={(e) => addYoutubeVideo(e)}>YouTube</button>
       </div>
 
-      <EditorContent editor={editor} className="editor-content" />
+      <EditorContent 
+        editor={editor} 
+        className="editor-content" 
+        onClick={(e) => e.stopPropagation()}
+      />
     </div>
   );
 };
