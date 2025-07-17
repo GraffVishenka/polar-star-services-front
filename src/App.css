@@ -1239,3 +1239,132 @@ button {
 button:hover {
   background-color: #e0e0e0;
 }
+
+/* Формы */
+.edit-form {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.searchable-select {
+  position: relative;
+}
+
+.searchable-select input {
+  width: 100%;
+  margin-bottom: 5px;
+  padding: 5px;
+}
+
+.searchable-select select {
+  width: 100%;
+  padding: 5px;
+}
+
+.form-actions {
+  margin-top: 20px;
+}
+
+/* Кнопки */
+.create-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #e0e0e0;
+}
+
+/* Состояния */
+.empty-state {
+  text-align: center;
+  padding: 50px;
+  color: #666;
+}
+
+/* Editor Styles */
+.editor-container {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.editor-toolbar {
+  padding: 8px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+}
+
+.editor-toolbar button,
+.editor-toolbar select,
+.editor-toolbar input {
+  padding: 4px 8px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.editor-toolbar button.is-active {
+  background-color: #e0e0e0;
+}
+
+.editor-content {
+  padding: 15px;
+  min-height: 300px;
+}
+
+/* Content Styles */
+.content-body {
+  line-height: 1.6;
+}
+
+.content-body h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.content-body h2 {
+  font-size: 1.5em;
+  margin: 0.83em 0;
+}
+
+.content-body img {
+  max-width: 100%;
+  height: auto;
+}
+
+.content-body iframe {
+  max-width: 100%;
+}
+
+/* ... (остальные стили остаются без изменений) */
