@@ -1,14 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import NotFoundPage from "./pages/NotFoundPage";
-
-import "./App.css";
 import MainLayout from "./components/layout/MainLayout";
 import HelpDeskPage from "./pages/HelpDeskPage";
-import AdminPage from "./pages/AdminPage";
-import KnowlegeBasePage from "./pages/KnowlegeBasePage";
 import ItAsseetsPage from "./pages/ItAsseetsPage";
 import ProfilePage from "./pages/ProfilePage";
+import KnowledgeBasePage from "./pages/KnowledgeBasePage";
+
+import "./App.css";
 
 const App = () => {
   return (
@@ -16,8 +15,7 @@ const App = () => {
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<HelpDeskPage />} />
-          <Route path="/admin" element={<AdminPage />} />
-          <Route path="/knowledge-base" element={<KnowlegeBasePage/>} />
+          <Route path="/knowledge-base" element={<KnowledgeBasePage />} />
           <Route path="/it-assets" element={<ItAsseetsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Route>

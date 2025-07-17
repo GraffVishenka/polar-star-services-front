@@ -27,3 +27,15 @@ export interface Attachment {
   size: number;
   url: string;
 }
+
+export interface KnowledgeItem {
+  id: string;
+  title: string;
+  content: string;
+  parentId: string | null;
+  level: number;
+  createdAt: string;
+  updatedAt: string;
+  images?: string[];
+  isExpanded?: boolean;
+}
